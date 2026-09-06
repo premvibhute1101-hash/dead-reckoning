@@ -1,0 +1,156 @@
+export type OperationalMatrixScenario =
+  | 'scenario1' // [GPS ON + Net ON] — Standard Online Navigation
+  | 'scenario2' // [GPS OFF + Net ON] — GNSS Outage / Tunnel Mode
+  | 'scenario3' // [GPS ON + Net OFF] — Pure Offline Satellite Mode
+  | 'scenario4'; // [GPS OFF + Net OFF] — Pure Offline Dead Reckoning
+
+export interface SensorStatus {
+  accel: boolean;
+  gyro: boolean;
+  compass: boolean;
+  gnss: boolean;
+}
+
+export interface RouteState {
+  origin: string;
+  destination: string;
+  startCoords: [number, number] | null;
+  destCoords: [number, number] | null;
+  routeCoordinates: [number, number][];
+  calculated: boolean;
+  distance: string;
+  duration: string;
+  distanceKm: number;
+  durationMin: number;
+  tunnelLength: string;
+  via?: string;
+  isCalculating: boolean;
+  isAcquiringLocation: boolean;
+  error?: string | null;
+  isFallbackRoute?: boolean;
+}
+
+export interface TelemetryData {
+  speed: number;
+  drift: number;
+  eta: string;
+  remainingKm: number;
+  ax: number;
+  ay: number;
+  az: number;
+  pitch: number;
+  roll: number;
+  yaw: number;
+}
+
+export interface SettingsState {
+  highSpeedPolling: boolean;
+  mapMatching: boolean;
+  keepScreenAwake: boolean;
+  offlineLogs: string;
+}
+
+export interface UserProfile {
+  name: string;
+  role: string;
+  id: string;
+  avatar: string;
+  stats: {
+    driven: string;
+    tunnels: number;
+    uptime: string;
+  };
+}
+
+export interface ToastState {
+  show: boolean;
+  message: string;
+}
+
+export interface TelemetryLogEntry {
+  timestamp: string;
+  lat: number;
+  lng: number;
+  speedKmH: number;
+  driftM: number;
+  ax: number;
+  ay: number;
+  az: number;
+  pitch: number;
+  roll: number;
+  yaw: number;
+  gnssLocked: boolean;
+  mode: string;
+}
+
+export interface NavigationContextType {
+  sensorStatus: SensorStatus;
+  routeState: RouteState;
+  telemetry: TelemetryData;
+  settings: SettingsState;
+  user: UserProfile;
+  toast: ToastState;
+  isLoggedIn: boolean;
+  isOnline: boolean;
+  matrixScenario: OperationalMatrixScenario;
+  cachedTilesCount: number;
+  telemetryLogs: TelemetryLogEntry[];
+
+  // Actions
+  setMatrixScenario: (scenario: OperationalMatrixScenario) => void;
+  calibrateCompass: () => void;
+  grantGnssPermission: () => void;
+  grantAllSensors: () => void;
+  acquireLiveLocation: () => Promise<void>;
+  setStartCoordsAndAddress: (coords: [number, number], address: string) => Promise<void>;
+  setDestCoordsAndAddress: (coords: [number, number], address: string) => Promise<void>;
+  setRouteDestination: (destination: string) => void;
+  updateOriginDestination: (origin: string, destination: string) => void;
+  calculateDynamicRoute: (start?: [number, number], dest?: [number, number]) => Promise<void>;
+  swapLocations: () => void;
+  clearRoute: () => void;
+  toggleSetting: (key: keyof SettingsState) => void;
+  clearOfflineLogs: () => void;
+  clearTileCache: () => Promise<void>;
+  showToast: (msg: string) => void;
+  exportTelemetryCsv: () => void;
+  loginUser: () => void;
+  logoutUser: () => void;
+}
+export interface NavigationContextType {
+  sensorStatus: SensorStatus;
+  routeState: RouteState;
+  telemetry: TelemetryData;
+  settings: SettingsState;
+  user: UserProfile;
+  toast: ToastState;
+  isLoggedIn: boolean;
+  isOnline: boolean;
+  matrixScenario: OperationalMatrixScenario;
+  scenarioAutoMode: boolean; // NEW: true = auto-detecting, false = user override active
+  cachedTilesCount: number;
+  telemetryLogs: TelemetryLogEntry[];
+
+  // Actions
+  setMatrixScenario: (scenario: OperationalMatrixScenario) => void;
+  resumeAutoScenario: () => void; // NEW: lets user re-enable auto-detection
+  setSensorGnss: (locked: boolean) => void; // NEW: reports real GPS lock/loss
+  calibrateCompass: () => void;
+  grantGnssPermission: () => void;
+  grantAllSensors: () => void;
+  acquireLiveLocation: () => Promise<void>;
+  setStartCoordsAndAddress: (coords: [number, number], address: string) => Promise<void>;
+  setDestCoordsAndAddress: (coords: [number, number], address: string) => Promise<void>;
+  setRouteDestination: (destination: string) => void;
+  updateOriginDestination: (origin: string, destination: string) => void;
+  calculateDynamicRoute: (start?: [number, number], dest?: [number, number]) => Promise<void>;
+  swapLocations: () => void;
+  clearRoute: () => void;
+  toggleSetting: (key: keyof SettingsState) => void;
+  clearOfflineLogs: () => void;
+  clearTileCache: () => Promise<void>;
+  showToast: (msg: string) => void;
+  exportTelemetryCsv: () => void;
+  loginUser: () => void;
+  logoutUser: () => void;
+}

@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "b2a63ce7-165b-4033-bb6f-e821709b0f24"
+      }
+    },
+    "android": {
+      "package": "com.rechnox.IDR"
+    }
+  }
+}
